@@ -15,7 +15,7 @@ export default function Page() {
     const router= useRouter()
 
     // console.log(username," ", roomId)
-    console.log(process.env.NEXT_PUBLIC_WS_URL!)
+    // console.log(process.env.NEXT_PUBLIC_WS_URL!)
 
     function handleStartGame() {
         if (username.trim() === "") {

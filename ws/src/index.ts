@@ -1,6 +1,7 @@
 import express from "express"
 import { createServer } from "http"
 import { Server } from "socket.io"
+import { SocketManager, User } from "./socketManager"
 
 
 
@@ -14,11 +15,14 @@ const io= new Server(httpServer, {
 
 
 io.on("connection", (socket) => {
-    console.log("user connected")
+    const { username, userId }= socket.handshake.query
+    console.log(`${username} with ${userId} connected`)
+    SocketManager.getInstance().addUser(new User(username as string, userId as string, socket))
 
 
     socket.conn.on("close", () => {
-        console.log("user disconnected")
+        SocketManager.getInstance().removeUser(userId as string)
+        console.log(`${username} with ${userId} disconnected`)
     })
 })
 
