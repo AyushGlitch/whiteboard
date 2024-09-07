@@ -5,6 +5,12 @@ import { useSearchParams } from "next/navigation"
 import { useSocket } from "../hooks/useSocket"
 import { v4 as uuidv4 } from "uuid"
 import { LoaderCircle } from "lucide-react"
+import { useEffect } from "react"
+import { joinedRoomDataType } from "../types/common"
+import { Socket } from "socket.io-client"
+
+
+
 
 
 export default function Wait () {
@@ -12,9 +18,21 @@ export default function Wait () {
     const username= searchParams.get("username")
     const userId= uuidv4()
     const roomId= searchParams.get("roomId")
-    const socket= useSocket(username!, userId)
+    const isHost= searchParams.get("isHost") === "true" ? true : false
+    const socket: Socket | null= useSocket(username!, userId, roomId!, isHost!)
 
-    console.log(username, " ", roomId)
+    console.log(username, " ", roomId, " ", isHost)
+
+
+    useEffect( () => {
+        if (socket) {
+            // @ts-ignore
+            socket.on("joined-room", (data: joinedRoomDataType) => {
+                console.log(data)
+            })
+        }
+
+    }, [socket] )
 
 
 

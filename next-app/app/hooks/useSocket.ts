@@ -3,14 +3,16 @@ import { io } from "socket.io-client"
 
 
 
-export const useSocket= (username: string, userId: string) => {
+export const useSocket= (username: string, userId: string, roomId: string, isHost: boolean) => {
     const [socket, setSocket] = useState(null)
 
     useEffect( () => {
         const newSocket= io(process.env.NEXT_PUBLIC_WS_URL!, {
             query: { 
                 username,
-                userId
+                userId,
+                roomId,
+                isHost
             }
         })
 
